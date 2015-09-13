@@ -1,0 +1,3 @@
+[submodule "telepathy-qt"]
+	path = telepathy-qt
+	url = http://anongit.freedesktop.org/git/telepathy/telepathy-qt.git

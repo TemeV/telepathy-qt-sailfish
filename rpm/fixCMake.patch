@@ -1,0 +1,12 @@
+diff --git a/TelepathyQt/CMakeLists.txt b/TelepathyQt/CMakeLists.txt
+index 58668cd..7bce580 100644
+--- a/TelepathyQt/CMakeLists.txt
++++ b/TelepathyQt/CMakeLists.txt
+@@ -775,7 +775,6 @@ target_link_libraries(telepathy-qt${QT_VERSION_MAJOR}
+     ${QT_QTNETWORK_LIBRARY}
+     ${QT_QTXML_LIBRARY}
+     ${TP_QT_LIBRARY_LINKER_FLAGS})
+-target_include_directories(telepathy-qt${QT_VERSION_MAJOR} PUBLIC "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/telepathy-qt${QT_VERSION_MAJOR}/>")
+ 
+ # Link - Library used by tests to test some unexported functionality
+ target_link_libraries(telepathy-qt-test-backdoors
