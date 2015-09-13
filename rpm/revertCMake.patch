@@ -1,3 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9a014ce..8200841 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(TelepathyQt)
+ 
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.11)
+ 
+ # Making releases:
+ #   set the new version number:
 diff --git a/TelepathyQt/CMakeLists.txt b/TelepathyQt/CMakeLists.txt
 index 58668cd..7bce580 100644
 --- a/TelepathyQt/CMakeLists.txt
@@ -10,3 +22,4 @@ index 58668cd..7bce580 100644
  
  # Link - Library used by tests to test some unexported functionality
  target_link_libraries(telepathy-qt-test-backdoors
+
