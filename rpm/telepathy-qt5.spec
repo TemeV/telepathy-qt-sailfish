@@ -1,8 +1,4 @@
 Name:       telepathy-qt5
-
-# >> macros
-# << macros
-
 Summary:    Qt 5 Telepathy library
 Version:    0.9.7.0
 Release:    1
@@ -14,6 +10,10 @@ Source1:    INSIGNIFICANT
 Source2:    mktests.sh.in
 Source3:    runDbusTest.sh.in
 Source4:    runTest.sh.in
+Patch0:     installTests.patch
+Patch1:     portTestScriptsGiBased.patch
+Patch2:     removeQt5widgetDepency.patch
+Patch3:     revertCMake.patch
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires:  pkgconfig(Qt5Core)
@@ -35,7 +35,6 @@ BuildRequires:  cmake
 %description
 Qt-based library for Telepathy components.
 
-
 %package devel
 Summary:    Development files for %{name}
 Group:      Development/Libraries
@@ -44,7 +43,6 @@ Requires:   %{name} = %{version}-%{release}
 %description devel
 This package contains libraries and header files for developing applications
 that use %{name}.
-
 
 %package farstream
 Summary:    Qt 5 Telepathy/Farstream integration
@@ -59,7 +57,6 @@ Obsoletes:  %{name}-farsight
 This package provides telepathy-qt5 integration with telepathy-farstream,
 which implements media stream using gstreamer and Farstream.
 
-
 %package farstream-devel
 Summary:    Development files for telepathy-qt5-farstream
 Group:      Development/Libraries
@@ -72,7 +69,6 @@ Obsoletes:  %{name}-farsight-devel
 This package contains libraries and header files for developing applications
 that use telepathy-qt5-farstream.
 
-
 %package tests
 Summary:    Automated tests for %{name}
 Group:      Development/Libraries
@@ -84,15 +80,15 @@ Requires:   pygobject2
 %description tests
 This package contains automated tests and tests.xml
 
-
 %prep
 %setup -q -n %{name}-%{version}/telepathy-qt
 
-# >> setup
-# << setup
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
-# >> build pre
 %__cp $RPM_SOURCE_DIR/INSIGNIFICANT tests/
 %__cp $RPM_SOURCE_DIR/mktests.sh.in tests/
 %__cp $RPM_SOURCE_DIR/runDbusTest.sh.in tests/
@@ -103,28 +99,19 @@ This package contains automated tests and tests.xml
 %__chmod 0755 tests/runTest.sh.in
 
 export QT_SELECT=5
+
 %cmake -DENABLE_TESTS=TRUE -DENABLE_FARSTREAM=TRUE -DENABLE_EXAMPLES=FALSE
-# << build pre
-
-
 make %{?_smp_mflags}
 
-# >> build post
 tests/mktests.sh > tests/tests.xml
-# << build post
 
 %install
 rm -rf %{buildroot}
-# >> install pre
 export QT_SELECT=5
-# << install pre
 %make_install
 
 # for some reason this file is deleted after it is first installed with make install
 cp TelepathyQt/libtelepathy-qt5-service.a $RPM_BUILD_ROOT/usr/lib/
-
-# >> install post
-# << install post
 
 %post -p /sbin/ldconfig
 
@@ -136,13 +123,10 @@ cp TelepathyQt/libtelepathy-qt5-service.a $RPM_BUILD_ROOT/usr/lib/
 
 %files
 %defattr(-,root,root,-)
-# >> files
 %{_libdir}/libtelepathy-qt5.so.*
-# << files
 
 %files devel
 %defattr(-,root,root,-)
-# >> files devel
 %{_libdir}/libtelepathy-qt5.so
 %{_libdir}/pkgconfig/TelepathyQt5.pc
 %{_includedir}/telepathy-qt5/TelepathyQt/*
@@ -151,26 +135,19 @@ cp TelepathyQt/libtelepathy-qt5-service.a $RPM_BUILD_ROOT/usr/lib/
 %{_libdir}/cmake/TelepathyQt5Service/TelepathyQt5ServiceConfigVersion.cmake
 %{_libdir}/pkgconfig/TelepathyQt5Service.pc
 %{_libdir}/libtelepathy-qt5-service.a
-# << files devel
 
 %files farstream
 %defattr(-,root,root,-)
-# >> files farstream
 %{_libdir}/libtelepathy-qt5-farstream.so.*
-# << files farstream
 
 %files farstream-devel
 %defattr(-,root,root,-)
-# >> files farstream-devel
 %{_libdir}/libtelepathy-qt5-farstream.so
 %{_includedir}/telepathy-qt5/TelepathyQt/Farstream/*
 %{_libdir}/cmake/TelepathyQt5Farstream/TelepathyQt5FarstreamConfig.cmake
 %{_libdir}/cmake/TelepathyQt5Farstream/TelepathyQt5FarstreamConfigVersion.cmake
 %{_libdir}/pkgconfig/TelepathyQt5Farstream.pc
-# << files farstream-devel
 
 %files tests
 %defattr(-,root,root,-)
 /opt/tests/%{name}/*
-# >> files tests
-# << files tests
